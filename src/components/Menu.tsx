@@ -5,7 +5,7 @@ const Menu = () => {
   const activeLink = " text-active ";
 
   return (
-    <nav className="bg-secondary rounded-md fixed w-full bottom-0">
+    <nav className="bg-secondary rounded-tl-md fixed w-full bottom-0">
       <ul className="flex items-center justify-center  gap-16 h-20 ">
         <li>
           <NavLink

@@ -102,4 +102,5 @@ export interface Message {
 export interface ListBreeds {
   message: Message;
   status: string;
+  code?: number;
 }

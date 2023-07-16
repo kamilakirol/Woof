@@ -3,6 +3,7 @@ import axios from "axios";
 import { useQuery } from "react-query";
 import { useSearchParams } from "react-router-dom";
 import FrenchBulldogImage from "../assets/frenchBulldog.jpg";
+import PageStatus from "./PageStatus";
 
 const Search = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -10,11 +11,12 @@ const Search = () => {
   const subBreedParam = searchParams.get("subBreed");
 
   const getNewBreed = () =>
-    breedParam
+    (breedParam
       ? subBreedParam
         ? breedParam + " " + subBreedParam
         : breedParam
-      : "";
+      : ""
+    ).toLocaleLowerCase();
   const [searchBreed, setSearchBreed] = useState(getNewBreed());
 
   useEffect(() => {
@@ -36,50 +38,61 @@ const Search = () => {
     return data;
   };
 
-  const { data, isLoading, error } = useQuery(
+  const { data, isLoading, error } = useQuery<any, any>(
     ["breedInfo", breedParam],
     fetchBreedInfo
   );
   let contentBreed = null;
 
   if (isLoading) {
-    contentBreed = <div>Ładuje się...</div>;
-  }
-
-  if (error) {
-    contentBreed = <div>Wystąpił błąd podczas pobierania danych</div>;
-  }
-  if (data) {
+    contentBreed = <PageStatus className="-mt-28" text="Ładuje się..." />;
+  } else if (error && error.response.status != 404) {
+    console.log({ error });
+    contentBreed = (
+      <PageStatus
+        className="-mt-28"
+        text="Wystąpił błąd podczas pobierania danych"
+      />
+    );
+  } else if (data) {
     contentBreed = (
       <div className="flex flex-col items-center">
-        <div className="mt-10 rounded-full max-w-xs h-80 overflow-hidden">
-          <img src={data.message} alt={searchBreed} />
+        <div className="mt-10 rounded-full max-w-xs h-60 w-60 overflow-hidden">
+          <img
+            className="h-full w-full object-cover"
+            src={data.message}
+            alt={searchBreed}
+          />
         </div>
-
-        <p className="w-52 mt-6 text-center">
-          Ten pies to wierny i przyjacielski czworonóg, który świetnie czuje się
-          w roli rodzinnego towarzysza. Dobrze dogaduje się z dziećmi, uwielbia
-          pieszczoty i wspólne zabawy. Jest łatwy w prowadzeniu, choć bywa
-          uparty. Sprawdzi się zarówno w małym mieszkaniu jak i w domu z
-          ogrodem. Wysokość w kłębie 30 i 35 cm, masa ciała 22-25 kg. Sierść
-          krótka, delikatna, lśniąca, umaszczenie płowe, pręgowate lub łaciate.
-          Charakter czujny, śmiały, oddany, odważny, łagodny, czasem uparty. W
-          zależności od dnia pokazuje różne oblicza swojej natury.
-        </p>
+        <div className="mt-10">
+          <h2 className="capitalize text-gray-200 font-semibold">
+            {searchBreed}
+          </h2>
+          <p className="max-w-md mt-6">
+            Ten pies to wierny i przyjacielski czworonóg, który świetnie czuje
+            się w roli rodzinnego towarzysza. Dobrze dogaduje się z dziećmi,
+            uwielbia pieszczoty i wspólne zabawy. Jest łatwy w prowadzeniu, choć
+            bywa uparty. Sprawdzi się zarówno w małym mieszkaniu jak i w domu z
+            ogrodem. Wysokość w kłębie 30 i 35 cm, masa ciała 22-25 kg. Sierść
+            krótka, delikatna, lśniąca, umaszczenie płowe, pręgowate lub
+            łaciate. Charakter czujny, śmiały, oddany, odważny, łagodny, czasem
+            uparty. W zależności od dnia pokazuje różne oblicza swojej natury.
+          </p>
+        </div>
       </div>
     );
   } else {
     if (breedParam) {
       contentBreed = (
         <div className="flex flex-col items-center">
-          <div className="mt-10 rounded-full w-80 h-80 bg-text relative">
+          <div className="mt-10 rounded-full w-60 h-60 bg-text flex items-center justify-center">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               version="1.1"
               viewBox="0 0 100 100"
-              className="bg-currentColor text-title absolute top-14 left-14"
-              height="170"
-              width="170"
+              className="bg-currentColor text-title"
+              height="120"
+              width="120"
             >
               <g transform="translate(0,-952.36218)">
                 <path
@@ -123,12 +136,16 @@ const Search = () => {
     } else {
       contentBreed = (
         <div className="flex flex-col items-center">
-          <div className="mt-10 rounded-full max-w-xs h-80 overflow-hidden">
-            <img src={FrenchBulldogImage} alt="french bulldog" />
+          <div className="mt-10 rounded-full max-w-xs h-60 w-60 overflow-hidden">
+            <img
+              className="h-full w-full object-cover"
+              src={FrenchBulldogImage}
+              alt="french bulldog"
+            />
           </div>
 
           <p className="w-52 mt-6 text-center">
-            Tutaj wyświetlimy informacje o interesującym Cię pupilu
+            Tu wyświetlimy informacje o interesującym Cię pupilu
           </p>
         </div>
       );
@@ -143,24 +160,26 @@ const Search = () => {
   return (
     <div className="w-full mb-20">
       <div className=" m-10 flex flex-col items-center">
-        <h2 className="font-bold mb-12 ">Szukaj a znajdziesz ;)</h2>
+        <h2 className={`mb-12 text-base ${breedParam ? "opacity-0" : ""}`}>
+          Szukaj a znajdziesz ;)
+        </h2>
         <form onSubmit={handleSearch} className="flex flex-col sm:flex-row">
           <div className="relative text-center">
-            <label className="bg-secondary text-primary absolute text-xs py-px px-2 rounded-sm -top-3 left-2 font-bold">
+            <label className="bg-secondary text-primary absolute text-xs py-px px-2 rounded-sm -top-3 left-2 font-semibold">
               Wpisz rasę, której szukasz
             </label>
             <input
               type="text"
               value={searchBreed}
               onChange={(e) => setSearchBreed(e.target.value)}
-              placeholder="np.Buldog angielski"
-              className="bg-transparent border rounded-md py-2.5 px-3 w-64"
+              placeholder="np. Bulldog English"
+              className="bg-transparent border rounded-md py-2.5 px-3 w-64 text-gray-200 placeholder:text-zinc-600"
             />
           </div>
 
           <button
             type="submit"
-            className="bg-secondary text-primary py-2.5 w-64 rounded-md font-bold ml-0 mt-6 sm:w-28 sm:ml-6 sm:mt-0"
+            className="bg-secondary text-gray-800 py-2.5 w-64 rounded-md text-base font-bold ml-0 mt-6 sm:w-28 sm:ml-6 sm:mt-0"
           >
             Szukaj
           </button>
