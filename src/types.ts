@@ -104,3 +104,8 @@ export interface ListBreeds {
   status: string;
   code?: number;
 }
+
+export interface BreedInfo {
+  message: string;
+  status: string;
+}

@@ -26,7 +26,9 @@ const router = createBrowserRouter([
 ]);
 
 const queryClient = new QueryClient({
-  defaultOptions: { queries: { refetchOnWindowFocus: false } },
+  defaultOptions: {
+    queries: { refetchOnWindowFocus: false, retry: 1 },
+  },
 });
 
 const root = ReactDOM.createRoot(
