@@ -2,7 +2,7 @@ This is a project called Woof App. In the app you can search dog breeds and info
 
 You can see demo here: https://woofapp-kamilakirol.netlify.app/
 
-![screenshot woof app](/public/assets/woofApp_img.jpg)
-![screenshot woof app](/public/assets/woofApp_img_2.jpg)
 ![screenshot woof app](/public/assets/woofApp_img_3.jpg)
 ![screenshot woof app](/public/assets/woofApp_img_4.jpg)
+![screenshot woof app](/public/assets/woofApp_img.jpg)
+![screenshot woof app](/public/assets/woofApp_img_2.jpg)
