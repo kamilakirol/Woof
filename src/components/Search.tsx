@@ -1,4 +1,4 @@
-import { useState, FormEvent, useEffect } from "react";
+import { useState, FormEvent, useEffect, useCallback } from "react";
 import axios from "axios";
 import { useQuery } from "react-query";
 import { useSearchParams } from "react-router-dom";
@@ -10,19 +10,22 @@ const Search = () => {
   const breedParam = searchParams.get("breed");
   const subBreedParam = searchParams.get("subBreed");
 
-  const getNewBreed = () =>
-    (breedParam
-      ? subBreedParam
-        ? breedParam + " " + subBreedParam
-        : breedParam
-      : ""
-    ).toLocaleLowerCase();
+  const getNewBreed = useCallback(
+    () =>
+      (breedParam
+        ? subBreedParam
+          ? breedParam + " " + subBreedParam
+          : breedParam
+        : ""
+      ).toLocaleLowerCase(),
+    [breedParam, subBreedParam]
+  );
   const [searchBreed, setSearchBreed] = useState(getNewBreed());
 
   useEffect(() => {
     const newBreed = getNewBreed();
     setSearchBreed(newBreed);
-  }, [breedParam, subBreedParam]);
+  }, [breedParam, subBreedParam, getNewBreed]);
 
   const fetchBreedInfo = async () => {
     if (!breedParam) {

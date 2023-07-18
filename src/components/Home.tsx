@@ -1,4 +1,3 @@
-import { NavLink } from "react-router-dom";
 import { useQuery } from "react-query";
 import { ListBreeds, Message } from "../types";
 import axios from "axios";
